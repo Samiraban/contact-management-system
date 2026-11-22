@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const api = axios.create({ baseURL: "/api", headers: { "Content-Type": "application/json" } });
+const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+const api = axios.create({ baseURL: `${API_BASE}/api`, headers: { "Content-Type": "application/json" } });
 api.interceptors.request.use(config => {
   const token = localStorage.getItem("cms_token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
