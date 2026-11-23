@@ -28,7 +28,7 @@ router.get("/stats", async (_req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
-    const limit = Math.min(50, Math.max(1, Number.parseInt(req.query.limit, 10) || 8));
+    const limit = 2;
     const search = String(req.query.search || "").trim();
     const favouriteOnly = req.query.favourite === "true";
     const filter = {};

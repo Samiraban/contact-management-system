@@ -1215,3 +1215,165 @@ body { background: #f7f4ed; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }.field-hint { display: block; margin-top: 5px; font-size: 11px; color: #a39d8b; }
+
+/* =========================================
+   LOGIN PAGE — REFINED BUSINESS DESIGN
+   ========================================= */
+
+.login-page.login-page-new {
+  background: #f2efe7 !important;
+}
+
+.login-layout.login-layout-new {
+  max-width: 1080px !important;
+  border: 1px solid #e7e1d5 !important;
+  border-radius: 15px !important;
+  box-shadow: 0 12px 40px rgba(42, 37, 25, 0.07) !important;
+}
+
+.login-form-panel.login-form-panel-new {
+  background: #fffdf8 !important;
+}
+
+.login-brand-new .brand-mark {
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+.login-card-new h1 {
+  font-size: clamp(34px, 3.2vw, 43px) !important;
+  letter-spacing: -1.7px !important;
+  font-weight: 750 !important;
+}
+
+.login-card-new .login-subtitle {
+  color: #777366 !important;
+  font-size: 13px !important;
+}
+
+.login-card-new .input-icon-wrap-new {
+  border-radius: 7px !important;
+  box-shadow: none !important;
+}
+
+.login-card-new .input-icon-wrap-new:focus-within {
+  transform: none !important;
+  box-shadow: 0 0 0 3px rgba(193, 157, 64, 0.12) !important;
+}
+
+.login-submit.login-submit-new {
+  border-radius: 7px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.login-submit-new:hover:not(:disabled) {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.login-brand-new,
+.login-card-new,
+.login-visual-panel {
+  animation: none !important;
+}
+
+/* Right information panel */
+
+.login-visual-panel {
+  background: #eeeae0 !important;
+  background-image: none !important;
+  color: #292820 !important;
+  padding: 48px !important;
+}
+
+.login-visual-panel::before {
+  display: none !important;
+}
+
+.login-visual-panel .visual-overlay-shape {
+  display: none !important;
+}
+
+.visual-tag {
+  display: inline-block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #92732c !important;
+  font-size: 10px !important;
+  letter-spacing: 1.4px !important;
+  backdrop-filter: none !important;
+}
+
+.visual-content h2 {
+  margin: 20px 0 13px !important;
+  color: #302e27 !important;
+  font-size: clamp(32px, 3.2vw, 42px) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -1.5px !important;
+}
+
+.visual-content h2 em {
+  color: #a17d28 !important;
+}
+
+.visual-content > p {
+  color: #706c60 !important;
+  font-size: 13px !important;
+  line-height: 1.75 !important;
+}
+
+.visual-feature {
+  max-width: 100% !important;
+  margin-top: 25px !important;
+  padding: 17px !important;
+  border: 1px solid #ded8ca !important;
+  border-radius: 9px !important;
+  background: #f8f5ed !important;
+  backdrop-filter: none !important;
+}
+
+.visual-feature-icon {
+  border-radius: 8px !important;
+  background: #e9d28b !important;
+}
+
+.visual-feature strong {
+  color: #302e27 !important;
+  font-size: 13px !important;
+}
+
+.visual-feature span {
+  color: #777366 !important;
+}
+
+.visual-caption {
+  margin-top: 25px !important;
+  color: #777366 !important;
+  font-size: 11px !important;
+}
+
+.visual-caption span {
+  background: #b79545 !important;
+}
+
+@media (max-width: 900px) {
+  .login-visual-panel {
+    min-height: 320px !important;
+    padding: 30px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .login-layout.login-layout-new {
+    border-radius: 0 !important;
+  }
+
+  .login-visual-panel {
+    min-height: 300px !important;
+    padding: 25px !important;
+  }
+}

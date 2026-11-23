@@ -1,8 +1,9 @@
+
 import { Edit3, Globe, Trash2, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function ContactTable({
-  contacts,
+  contacts = [],
   onDelete,
   onFavourite,
   favouriteMode = false,
@@ -14,12 +15,20 @@ export default function ContactTable({
   if (!contacts.length) {
     return (
       <div className="empty-state">
-        <div className="empty-icon"><UserRound size={25} /></div>
-        <h3>No contacts found</h3>
+        <div className="empty-icon">
+          <UserRound size={23} />
+        </div>
+
+        <h3>
+          {favouriteMode
+            ? "No favourite contacts"
+            : "No contacts found"}
+        </h3>
+
         <p>
           {favouriteMode
-            ? "Contacts marked as favourite will appear here."
-            : "Add your first contact to get started."}
+            ? "Contacts you mark as favourites will appear here."
+            : "There are no contacts to display."}
         </p>
       </div>
     );
@@ -28,57 +37,88 @@ export default function ContactTable({
   return (
     <div className="table-scroll">
       <table className="contact-table">
+
         <thead>
           <tr>
-            <th className="sn-col">SN</th>
-            <th>CONTACT NAME</th>
-            <th>MOBILE</th>
-            <th>EMAIL ADDRESS</th>
-            <th>ADDRESS</th>
-            {!readOnly && <th className="action-col">ACTIONS</th>}
+            <th className="sn-col">No.</th>
+            <th>Contact</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th>Address</th>
+
+            {!readOnly && (
+              <th className="action-col">Actions</th>
+            )}
           </tr>
         </thead>
 
         <tbody>
           {contacts.map((contact, index) => (
-            <tr key={contact._id} className="row-anim" style={{ "--i": index }}>
-              <td className="muted-cell">{startIndex + index + 1}</td>
+            <tr key={contact._id}>
+
+              <td className="muted-cell">
+                {startIndex + index + 1}
+              </td>
 
               <td>
                 <div className="contact-person">
+
                   <div className="contact-avatar">
-                    {contact.contactName?.slice(0, 1).toUpperCase()}
+                    {(contact.contactName || "?")
+                      .slice(0, 1)
+                      .toUpperCase()}
                   </div>
-                  <div>
+
+                  <div className="contact-person-details">
                     <div className="name-row">
-                      <strong>{contact.contactName}</strong>
+                      <strong>
+                        {contact.contactName || "Unnamed contact"}
+                      </strong>
+
                       {contact.websiteUrl && (
                         <a
                           className="site-link"
                           href={contact.websiteUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          title={`Visit ${contact.websiteUrl}`}
+                          title="Visit website"
+                          aria-label={`Visit ${contact.contactName}'s website`}
                         >
-                          <Globe size={13} />
+                          <Globe size={14} />
                         </a>
                       )}
                     </div>
-                    <span>{contact.companyName}</span>
+
+                    <span>
+                      {contact.companyName || "—"}
+                    </span>
                   </div>
+
                 </div>
               </td>
 
-              <td className="nowrap">{contact.mobileNumber}</td>
-
-              <td>
-                <a className="email-link" href={`mailto:${contact.emailAddress}`}>
-                  {contact.emailAddress}
-                </a>
+              <td className="nowrap">
+                {contact.mobileNumber || "—"}
               </td>
 
-              <td className="address-cell" title={contact.fullAddress}>
-                {contact.fullAddress}
+              <td>
+                {contact.emailAddress ? (
+                  <a
+                    className="email-link"
+                    href={`mailto:${contact.emailAddress}`}
+                  >
+                    {contact.emailAddress}
+                  </a>
+                ) : (
+                  "—"
+                )}
+              </td>
+
+              <td
+                className="address-cell"
+                title={contact.fullAddress || ""}
+              >
+                {contact.fullAddress || "—"}
               </td>
 
               {!readOnly && (
@@ -88,33 +128,48 @@ export default function ContactTable({
                       <input
                         type="checkbox"
                         checked={false}
-                        onChange={() => onFavourite(contact, false)}
+                        onChange={() =>
+                          onFavourite?.(contact, false)
+                        }
+                        aria-label={`Remove ${contact.contactName} from favourites`}
                       />
-                      <span>Mark as unfavourite</span>
+
+                      <span>Remove favourite</span>
                     </label>
                   ) : (
                     <div className="action-buttons">
+
                       <button
+                        type="button"
                         className="action-icon"
                         title="Edit contact"
-                        onClick={() => navigate(`/contacts/${contact._id}/edit`)}
+                        aria-label={`Edit ${contact.contactName}`}
+                        onClick={() =>
+                          navigate(`/contacts/${contact._id}/edit`)
+                        }
                       >
                         <Edit3 size={16} />
                       </button>
+
                       <button
+                        type="button"
                         className="action-icon delete-action"
                         title="Delete contact"
-                        onClick={() => onDelete(contact)}
+                        aria-label={`Delete ${contact.contactName}`}
+                        onClick={() => onDelete?.(contact)}
                       >
                         <Trash2 size={16} />
                       </button>
+
                     </div>
                   )}
                 </td>
               )}
+
             </tr>
           ))}
         </tbody>
+
       </table>
     </div>
   );

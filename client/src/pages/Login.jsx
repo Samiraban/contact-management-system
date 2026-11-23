@@ -1,29 +1,23 @@
 
 import { useState } from "react";
 import {
-  ArrowRight, BookUser, Eye, EyeOff, LockKeyhole, Mail,
-  ShieldCheck, UserRound, KeyRound, CheckCircle2
+  ArrowRight,
+  BookUser,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  Mail,
+  ShieldCheck
 } from "lucide-react";
+
 import api, { errorMessage } from "../api";
 
 export default function Login({ onLogin }) {
-  const [mode, setMode] = useState("login");
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signupCode, setSignupCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const isSignup = mode === "signup";
-
-  const switchMode = (nextMode) => {
-    setMode(nextMode);
-    setError("");
-    setPassword("");
-    setSignupCode("");
-  };
 
   const submit = async (event) => {
     event.preventDefault();
@@ -31,13 +25,11 @@ export default function Login({ onLogin }) {
     setLoading(true);
 
     try {
-      const endpoint = isSignup ? "/auth/register" : "/auth/login";
+      const { data } = await api.post("/auth/login", {
+        email,
+        password
+      });
 
-      const payload = isSignup
-        ? { name, email, password, signupCode }
-        : { email, password };
-
-      const { data } = await api.post(endpoint, payload);
       onLogin(data);
     } catch (err) {
       setError(errorMessage(err));
@@ -48,34 +40,33 @@ export default function Login({ onLogin }) {
 
   return (
     <main className="login-page login-page-new">
-      <div className={`login-layout login-layout-new ${isSignup ? "is-signup" : "is-login"}`}>
+      <div className="login-layout login-layout-new is-login">
 
         <section className="login-form-panel login-form-panel-new">
 
           <div className="login-brand login-brand-new">
             <div className="brand-mark">
-              <BookUser size={23} />
+              <BookUser size={22} />
             </div>
-            <span>Contact Management <b>System</b></span>
+
+            <span>
+              Contact Management <b>System</b>
+            </span>
           </div>
 
-          <div className="login-card login-card-new" key={mode}>
+          <div className="login-card login-card-new">
 
             <div className="login-kicker">
               <span className="login-kicker-dot" />
-              ADMINISTRATOR WORKSPACE
+              ADMINISTRATOR ACCESS
             </div>
 
             <h1>
-              {isSignup
-                ? <>Create your <em>account.</em></>
-                : <>Welcome <em>back.</em></>}
+              Sign <em>in.</em>
             </h1>
 
             <p className="login-subtitle">
-              {isSignup
-                ? "Set up your administrator account and bring your contacts together in one organised workspace."
-                : "Sign in to manage your contacts and keep every important connection close."}
+              Sign in with your administrator credentials to continue.
             </p>
 
             {error && (
@@ -84,121 +75,78 @@ export default function Login({ onLogin }) {
               </div>
             )}
 
-            <form onSubmit={submit} className={isSignup ? "signup-form" : ""}>
+            <form onSubmit={submit}>
 
-  {isSignup && (
-    <div className="field">
-      <label htmlFor="admin-name">Full name</label>
-      <div className="input-icon-wrap input-icon-wrap-new">
-        <UserRound size={19} />
-        <input
-          id="admin-name"
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          placeholder="Your full name"
-          autoComplete="name"
-          minLength={2}
-          maxLength={60}
-          required
-        />
-      </div>
-    </div>
-  )}
+              <div className="field">
+                <label htmlFor="admin-email">
+                  Email address
+                </label>
 
-  <div className="field">
-    <label htmlFor="admin-email">Email address</label>
-    <div className="input-icon-wrap input-icon-wrap-new">
-      <Mail size={19} />
-      <input
-        id="admin-email"
-        type="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        placeholder="you@example.com"
-        autoComplete="email"
-        required
-      />
-    </div>
-  </div>
+                <div className="input-icon-wrap input-icon-wrap-new">
+                  <Mail size={18} />
 
-  <div className="field">
-    <label htmlFor="admin-password">Password</label>
-    <div className="input-icon-wrap input-icon-wrap-new">
-      <LockKeyhole size={19} />
-      <input
-        id="admin-password"
-        type={showPassword ? "text" : "password"}
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        placeholder={isSignup ? "8+ characters" : "Enter your password"}
-        autoComplete={isSignup ? "new-password" : "current-password"}
-        minLength={isSignup ? 8 : undefined}
-        required
-      />
-      <button
-        type="button"
-        className="password-toggle"
-        onClick={() => setShowPassword(!showPassword)}
-        aria-label={showPassword ? "Hide password" : "Show password"}
-      >
-        {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
-      </button>
-    </div>
-  </div>
+                  <input
+                    id="admin-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+              </div>
 
-  {isSignup && (
-    <div className="field">
-      <label htmlFor="signup-code">Access code</label>
-      <div className="input-icon-wrap input-icon-wrap-new">
-        <KeyRound size={19} />
-        <input
-          id="signup-code"
-          type="password"
-          value={signupCode}
-          onChange={e => setSignupCode(e.target.value)}
-          placeholder="Workspace code"
-          autoComplete="off"
-          required
-        />
-      </div>
-    </div>
-  )}
+              <div className="field">
+                <label htmlFor="admin-password">
+                  Password
+                </label>
 
-  {isSignup && (
-    <p className="signup-hint">
-      Ask your project manager for the workspace access code.
-    </p>
-  )}
+                <div className="input-icon-wrap input-icon-wrap-new">
+                  <LockKeyhole size={18} />
 
-  <button
-    className="primary-button login-submit login-submit-new"
-    disabled={loading}
-  >
-    {loading
-      ? (isSignup ? "Creating account..." : "Signing in...")
-      : (isSignup ? "Create administrator account" : "Sign in to your account")}
-    <ArrowRight size={19} />
-  </button>
+                  <input
+                    id="admin-password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    required
+                  />
 
-</form>
-
-            <div className="login-switch">
-              {isSignup
-                ? "Already have an account?"
-                : "New to the workspace?"}
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword
+                      ? <EyeOff size={18} />
+                      : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
 
               <button
-                type="button"
-                onClick={() => switchMode(isSignup ? "login" : "signup")}
+                type="submit"
+                className="primary-button login-submit login-submit-new"
+                disabled={loading}
               >
-                {isSignup ? "Sign in" : "Create an account"}
+                <span>
+                  {loading ? "Signing in..." : "Sign in"}
+                </span>
+
+                <ArrowRight size={18} />
               </button>
-            </div>
+
+            </form>
 
             <div className="login-security login-security-new">
-              <ShieldCheck size={17} />
-              Secure administrator {isSignup ? "registration" : "sign-in"}
+              <ShieldCheck size={16} />
+              Administrator access
             </div>
 
           </div>
@@ -217,36 +165,40 @@ export default function Login({ onLogin }) {
           <div className="visual-content">
 
             <span className="visual-tag">
-              YOUR NETWORK, IN ONE PLACE
+              CONTACT DIRECTORY
             </span>
 
             <h2>
-              Good connections<br />
-              make <em>great things</em><br />
-              happen.
+              Your contacts.<br />
+              <em>One workspace.</em>
             </h2>
 
             <p>
-              A clearer way to organise people, build stronger
-              relationships, and stay on top of every conversation.
+              Keep contact details, company information and
+              important records organised in one place.
             </p>
 
             <div className="visual-feature">
+
               <div className="visual-feature-icon">
-                <BookUser size={20} />
+                <BookUser size={19} />
               </div>
 
               <div>
-                <strong>Every contact matters</strong>
-                <span>Keep your professional world organised.</span>
+                <strong>Contact records</strong>
+
+                <span>
+                  Add, update and manage your directory.
+                </span>
               </div>
+
             </div>
 
           </div>
 
           <div className="visual-caption">
             <span />
-            Simple. Secure. Connected.
+            Contact Management System
           </div>
 
         </aside>
